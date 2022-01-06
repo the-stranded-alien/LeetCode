@@ -80,7 +80,8 @@ public:
 			// Add the first column from the remaining columns !	
 			if(l < n) {
 				for(int i = m - 1; i >= k; i--) result.push_back(matrix[i][l]);
-			}	l++;
+				l++;
+			}
 		}  
     	return result;
     }
