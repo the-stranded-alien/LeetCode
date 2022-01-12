@@ -53,21 +53,32 @@ void __f (const char* names, Arg1&& arg1, Args&&... args) {
 
 const int N = 200005;
 
-// Given an integer array nums, find the contiguous subarray
-// (containing at least one number) which has the largest sum and return its sum.
-// A subarray is a contiguous part of an array.
+// You are given a large integer represented as an integer array digits, where each digits[i] is the ith digit of the integer.
+// The digits are ordered from most significant to least significant in left-to-right order.
+// The large integer does not contain any leading 0's.
+// Increment the large integer by one and return the resulting array of digits.
 
 class Solution {
 public:
-    int maxSubArray(vector<int>& nums) {
-    	int n = nums.size();
-    	int prefixSum = nums[0];
-    	int maxSubArraySum = prefixSum;
-    	for(int i = 1; i < n; i++) {
-    		prefixSum = max(prefixSum + nums[i], nums[i]);
-    		maxSubArraySum = max(maxSubArraySum, prefixSum);
-    	}
-    	return maxSubArraySum;
+    vector<int> plusOne(vector<int>& digits) {
+        vector<int> plusOneResult;
+        plusOneResult.reserve((digits.size() + 1));
+        int n = digits.size();
+        bool isOneAdded = false;
+        for(int itr = (n - 1); itr >= 0; itr--) {
+        	if(!isOneAdded) {
+        		int cur = digits[itr];
+        		if(cur <= 8) {
+        			isOneAdded = true;
+        			plusOneResult.push_back(cur + 1);
+        		} else if(cur == 9) {
+        			plusOneResult.push_back(0);
+        		}
+        	} else plusOneResult.push_back(digits[itr]);
+        }
+        if(!isOneAdded) plusOneResult.push_back(1);
+        reverse(plusOneResult.begin(), plusOneResult.end());
+        return plusOneResult;
     }
 };
 
@@ -75,15 +86,15 @@ void solve() {
 	// Main Code Goes Here !!
 	int n;
 	cin >> n;
-	vi nums;
+	vi digits;
 	int temp;
 	while(n--) {
 		cin >> temp;
-		nums.pb(temp);
+		digits.pb(temp);
 	}	
 	Solution *soln = new Solution();
-	int maxSubArraySum = soln->maxSubArray(nums);
-	cout << maxSubArraySum << nl;
+	vi plusOneResult = soln->plusOne(digits);
+	for(auto dig : plusOneResult) cout << dig << " ";
 	return;
 }
 
