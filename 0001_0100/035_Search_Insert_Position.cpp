@@ -69,7 +69,6 @@ public:
         		idx = mid;
         		return mid;
         	} else if(nums[mid] < target) {
-        		cout << nums[mid] << " " << mid << nl;
         		s = mid + 1;
         	} else {
         		idx = mid;
