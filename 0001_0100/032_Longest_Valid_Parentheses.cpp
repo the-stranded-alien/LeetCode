@@ -53,54 +53,33 @@ void __f (const char* names, Arg1&& arg1, Args&&... args) {
 
 const int N = 200005;
 
-// There is an integer array nums sorted in ascending order (with distinct values).
-// Prior to being passed to your function, nums is possibly rotated at an unknown
-// pivot index k (1 <= k < nums.length) such that the resulting array is
-// [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]
-// (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3
-// and become [4,5,6,7,0,1,2].
-// Given the array nums after the possible rotation and an integer target,
-// return the index of target if it is in nums, or -1 if it is not in nums.
-// You must write an algorithm with O(log n) runtime complexity.
+// Given a string containing just the characters '(' and ')', find the length of
+// the longest valid (well-formed) parentheses substring.
 
 class Solution {
 public:
-
-	int searchHelper(vector<int> &nums, int start, int end, int target) {
-		if(start > end) return -1;
-		int mid = (start + end) / 2;
-		if(nums[mid] == target) return mid;		
-		// If nums[start ... mid] is sorted
-		if(nums[start] <= nums[mid]) {
-			if(target >= nums[start] && target <= nums[mid]) {
-				return searchHelper(nums, start, mid - 1, target);
-			}
-			return searchHelper(nums, mid + 1, end, target);
-		}
-		// If nums[mid + 1 ... end] is sorted 
-		else {
-			if(target >= nums[mid] && target <= nums[end]) {
-				return searchHelper(nums, mid + 1, end, target);
-			}
-			return searchHelper(nums, start, mid - 1, target);
-		}
-	}
-
-    int search(vector<int>& nums, int target) {
-     	return searchHelper(nums, 0, nums.size() - 1, target);   
+    int longestValidParentheses(string s) {
+        vector<int> stk = {-1};
+        int lvp = 0;
+        for(int i = 0; i < s.size(); i++) {
+        	if(s[i] == '(') stk.push_back(i);
+        	else if(stk.size() == 1) stk[0] = i;
+        	else {
+        		stk.pop_back();
+        		lvp = max(lvp, i - stk.back());
+        	}
+        }
+        return lvp;
     }
 };
 
 void solve() {
 	// Main Code Goes Here !!
-	int n; cin >> n;
-	vector<int> nums(n, 0);
-	for(int i = 0; i < n; i++) cin >> nums[i];
-	int target; cin >> target;	
+	string s; cin >> s;
 	Solution *soln = new Solution();
-	int s = soln->search(nums, target);
-	cout << s << nl;
-	return;
+	int lvp = soln->longestValidParentheses(s);
+	cout << lvp << nl;
+	return;	
 }
 
 int32_t main() {

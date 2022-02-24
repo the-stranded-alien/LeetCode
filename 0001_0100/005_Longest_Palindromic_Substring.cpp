@@ -53,54 +53,57 @@ void __f (const char* names, Arg1&& arg1, Args&&... args) {
 
 const int N = 200005;
 
-// There is an integer array nums sorted in ascending order (with distinct values).
-// Prior to being passed to your function, nums is possibly rotated at an unknown
-// pivot index k (1 <= k < nums.length) such that the resulting array is
-// [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]
-// (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3
-// and become [4,5,6,7,0,1,2].
-// Given the array nums after the possible rotation and an integer target,
-// return the index of target if it is in nums, or -1 if it is not in nums.
-// You must write an algorithm with O(log n) runtime complexity.
+// Given a string s, return the longest palindromic substring in s.
 
 class Solution {
 public:
-
-	int searchHelper(vector<int> &nums, int start, int end, int target) {
-		if(start > end) return -1;
-		int mid = (start + end) / 2;
-		if(nums[mid] == target) return mid;		
-		// If nums[start ... mid] is sorted
-		if(nums[start] <= nums[mid]) {
-			if(target >= nums[start] && target <= nums[mid]) {
-				return searchHelper(nums, start, mid - 1, target);
-			}
-			return searchHelper(nums, mid + 1, end, target);
-		}
-		// If nums[mid + 1 ... end] is sorted 
-		else {
-			if(target >= nums[mid] && target <= nums[end]) {
-				return searchHelper(nums, mid + 1, end, target);
-			}
-			return searchHelper(nums, start, mid - 1, target);
-		}
-	}
-
-    int search(vector<int>& nums, int target) {
-     	return searchHelper(nums, 0, nums.size() - 1, target);   
+    string longestPalindrome(string s) {
+        int n = s.size();
+        int maxLen = 1;
+        vector< vector<bool> > dp(n, vector<bool>(n, false));
+        // SubStrings of Length 1 are All Palindromic
+        for(int i = 0; i < n; i++) dp[i][i] = true;
+        // Check for SubStrings of Length 2.
+        int start = 0;
+        for(int i = 0; i < (n - 1); i++) {
+        	if(s[i] == s[i + 1]) {
+        		dp[i][i + 1] = true;
+        		start = i;
+        		maxLen = 2;
+        	}
+        }
+        // Check for SubStrings of Length >= 3.
+        // len = Length of SubString
+        for(int len = 3; len <= n; len++) {
+        	// Start Index
+        	for(int i = 0; i < (n - len + 1); i++) {
+        		// End Index
+        		int j = (i + len - 1);
+        		// Check for SubString from Start(i) to End(j) Index
+        		if((dp[i + 1][j - 1]) && (s[i] == s[j])) {
+        			dp[i][j] = true;
+        			if(len > maxLen) {
+        				start = i;
+        				maxLen = len;
+        			}
+        		}
+        	}
+        }
+        // for(int i = 0; i < n; i++) {
+        // 	for(int j = 0; j < n; j++) cout << dp[i][j] << " ";
+        // 	cout << nl;
+        // }
+        return s.substr(start, maxLen);
     }
 };
 
 void solve() {
 	// Main Code Goes Here !!
-	int n; cin >> n;
-	vector<int> nums(n, 0);
-	for(int i = 0; i < n; i++) cin >> nums[i];
-	int target; cin >> target;	
+	string s; cin >> s;
 	Solution *soln = new Solution();
-	int s = soln->search(nums, target);
-	cout << s << nl;
-	return;
+	string lp = soln->longestPalindrome(s);
+	cout << lp << nl;
+	return;	
 }
 
 int32_t main() {
