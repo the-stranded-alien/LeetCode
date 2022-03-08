@@ -60,23 +60,42 @@ const int N = 200005;
 
 class Solution {
 public:
+   //  vector<int> dailyTemperatures(vector<int>& temperatures) {
+   //      int n = temperatures.size();
+   //      vector<int> nextWarmerDay(n, 0);
+   //      int hottest = 0;
+   //      for(int i = (n - 1); i >= 0; i--) {
+			// int curTemp = temperatures[i];
+			// if(curTemp >= hottest) {
+			// 	hottest = curTemp;
+			// 	continue;
+			// }
+			// int days = 1;
+			// while(temperatures[i + days] <= curTemp) {
+			// 	days += nextWarmerDay[i + days];		
+			// }
+			// nextWarmerDay[i] = days;
+   //      }
+   //      return nextWarmerDay;
+   //  }
+
+    // Monotonic Stack
     vector<int> dailyTemperatures(vector<int>& temperatures) {
-        int n = temperatures.size();
-        vector<int> nextWarmerDay(n, 0);
-        int hottest = 0;
-        for(int i = (n - 1); i >= 0; i--) {
-			int curTemp = temperatures[i];
-			if(curTemp >= hottest) {
-				hottest = curTemp;
-				continue;
-			}
-			int days = 1;
-			while(temperatures[i + days] <= curTemp) {
-				days += nextWarmerDay[i + days];		
-			}
-			nextWarmerDay[i] = days;
-        }
-        return nextWarmerDay;
+    	int n = temperatures.size();
+    	vector<int> nextWarmerDay(n, 0);
+    	stack<int> monotonicStack;
+    	for(int curDay = 0; curDay < n; curDay++) {
+    		int curTemp = temperatures[curDay];
+    		// Pop untill the current day's temperature is not
+    		// warmer than the temperature at the top of the stack.
+    		while(!monotonicStack.empty() && temperatures[monotonicStack.top()] < curTemp) {
+    			int prevDay = monotonicStack.top();
+                monotonicStack.pop();
+    			nextWarmerDay[prevDay] = curDay - prevDay;
+    		}
+    		monotonicStack.push(curDay);
+    	}
+    	return nextWarmerDay;
     }
 };
 
