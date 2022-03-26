@@ -53,68 +53,46 @@ void __f (const char* names, Arg1&& arg1, Args&&... args) {
 
 const int N = 200005;
 
-// Implement a first in first out (FIFO) queue using only two stacks. The implemented queue 
-// should support all the functions of a normal queue (push, peek, pop, and empty).
-// Implement the MyQueue class:
-// void push(int x) Pushes element x to the back of the queue.
-// int pop() Removes the element from the front of the queue and returns it.
-// int peek() Returns the element at the front of the queue.
-// boolean empty() Returns true if the queue is empty, false otherwise.
-// Notes:
+// A message containing letters from A-Z can be encoded into numbers using
+// the following mapping:
+// 'A' -> "1"
+// 'B' -> "2"
+// ...
+// 'Z' -> "26"
+// To decode an encoded message, all the digits must be grouped then mapped
+// back into letters using the reverse of the mapping above (there may be 
+// multiple ways). For example, "11106" can be mapped into:
+// "AAJF" with the grouping (1 1 10 6)
+// "KJF" with the grouping (11 10 6)
+// Note that the grouping (1 11 06) is invalid because "06"
+// cannot be mapped into 'F' since "6" is different from "06".
+// Given a string s containing only digits, return the number of ways to decode it.
+// The test cases are generated so that the answer fits in a 32-bit integer.
 
-// You must use only standard operations of a stack, which means only push to top, peek/pop
-// from top, size, and is empty operations are valid.
-// Depending on your language, the stack may not be supported natively. You may simulate a
-// stack using a list or deque (double-ended queue) as long as you use only a stack's 
-// standard operations.
-
-class MyQueue {
-private:
-    stack<int> *s1;
-    stack<int> *s2;
-    int front;
+class Solution {
 public:
-    MyQueue() {
-        s1 = new stack<int>();
-        s2 = new stack<int>();
-    }
-    
-    void push(int x) {
-        if(s1->empty()) front = x;
-        s1->push(x);
-        return;
-    }
-    
-    int pop() {
-        if(s2->empty()) {
-        	while(!s1->empty()) {
-        		s2->push(s1->top());
-        		s1->pop();
-        	}
-        }
-        int x = s2->top();
-        s2->pop();
-        return x;
-    }
-    
-    int peek() {
-        if(!s2->empty()) return s2->top();
-        return front;
-    }
-    
-    bool empty() {
-        return (s1->empty() && s2->empty());
+    int numDecodings(string s) {
+    	vector<int> dp(s.length() + 1);
+    	dp[0] = 1;
+    	dp[1] = (s[0] == '0') ? 0 : 1;
+    	for(int i = 2; i < (s.length() + 1); i++) {
+    		if(s[i - 1] != '0') dp[i] = dp[i - 1];
+    		int twoDig = stoi(s.substr(i - 2, 2));
+    		if(twoDig >= 10 && twoDig <= 26) dp[i] += dp[i - 2];
+    	}
+    	return dp[s.length()];
     }
 };
 
-/**
- * Your MyQueue object will be instantiated and called as such:
- * MyQueue* obj = new MyQueue();
- * obj->push(x);
- * int param_2 = obj->pop();
- * int param_3 = obj->peek();
- * bool param_4 = obj->empty();
- */
+void solve() {
+	// Main Code Goes Here !!
+	string s; cin >> s;
+	Solution *soln = new Solution();
+	int deco = soln->numDecodings(s);
+	cout << deco << nl;
+	return;	
+}
+
 int32_t main() {
 	// Fast Input-Output
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
