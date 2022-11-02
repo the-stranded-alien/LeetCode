@@ -53,36 +53,35 @@ void __f (const char* names, Arg1&& arg1, Args&&... args) {
 
 const int N = 200005;
 
+// Given an array of integers arr, a lucky integer is an integer that has a frequency in the array equal to its value.
 
-// You are given an integer array nums and an integer k.
-// In one operation, you can choose any index i where 0 <= i < nums.length 
-// and change nums[i] to nums[i] + x where x is an integer from the range [-k, k]. 
-// You can apply this operation at most once for each index i.
-// The score of nums is the difference between the maximum and minimum elements in nums.
-// Return the minimum score of nums after applying the mentioned operation at most once
-// for each index in it.
+// Return the largest lucky integer in the array. If there is no lucky integer return -1.
+
+
 
 class Solution {
 public:
-	int smallestRangeI(vector<int>& nums, int k) {
-        int minElement = INT_MAX;
-        int maxElement = INT_MIN;
-        for(auto num : nums) {
-        	minElement = min(minElement, num);
-        	maxElement = max(maxElement, num);
+	const int MAX_NUM = 500;
+
+	int findLucky(vector<int>& arr) {
+        vi freq(MAX_NUM + 1, 0);
+        for(auto a : arr) freq[a] += 1;
+        for(int i = MAX_NUM; i > 0; i--) {
+        	if(i == freq[i]) return i;
         }
-        return max(0, (maxElement - minElement - (2 * k)));
+        return - 1;
     }
 };
 
 void solve() {
 	// Main Code Goes Here !!
+	
 	int n; cin >> n;
-	vi nums(n, 0);
-	for(int i = 0; i < n; i++) cin >> nums[i];
-	int k; cin >> k;
+	vi arr(n, 0);
+	for(int i = 0; i < n; i++) cin >> arr[i];
 	Solution *soln = new Solution();
-	cout << soln->smallestRangeI(nums, k);
+	cout << soln->findLucky(arr);
+
 	return;
 }
 
