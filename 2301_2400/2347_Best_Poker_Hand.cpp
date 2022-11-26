@@ -12,6 +12,7 @@ using namespace std;
 #define si 					set <int>
 #define vi 					vector <int>
 #define vs					vector <string>
+#define vc                  vector <char>
 #define vb					vector <bool>
 #define pii 				pair <int, int>
 #define vpi         		vector <pii>
@@ -53,73 +54,50 @@ void __f (const char* names, Arg1&& arg1, Args&&... args) {
 
 const int N = 200005;
 
-// You are given an array of strings words. Each element of words consists of two lowercase English letters.
-
-// Create the longest possible palindrome by selecting some elements from words and concatenating them in any order. Each element can be selected at most once.
-
-// Return the length of the longest palindrome that you can create. If it is impossible to create any palindrome, return 0.
-
-// A palindrome is a string that reads the same forward and backward.
+// You are given an integer array ranks and a character array suits.
+// You have 5 cards where the ith card has a rank of ranks[i] and a suit of suits[i].
+// The following are the types of poker hands you can make from best to worst:
+// "Flush": Five cards of the same suit.
+// "Three of a Kind": Three cards of the same rank.
+// "Pair": Two cards of the same rank.
+// "High Card": Any single card.
+// Return a string representing the best type of poker hand you can make with the given cards.
+// Note that the return values are case-sensitive.
 
 class Solution {
 public:
-	int longestPalindrome(vector<string>& words) {
-        unordered_map<string, int> freqMap;
-        for(auto word : words) {
-        	if(freqMap.find(word) != freqMap.end()) freqMap[word] += 1;
-        	else freqMap[word] = 1;
-        }
-        int l = 0;
-        for(auto fr : freqMap) {
-        	string s = fr.first;
-        	int v = fr.second;
-        	string r = s;
-        	reverse(r.begin(), r.end());
-        	if(s == r) {
-        		int c = freqMap[s];
-        		if(c % 2 == 0) {
-        			l += 2 * c;
-        			freqMap[s] = 0;
-        		} else {
-        			l += 2 * (c - 1);
-        			freqMap[s] = 1;
-        		}
-        	} else {
-        		if(freqMap.find(r) != freqMap.end()) {
-        			int rv = freqMap[r];        		
-        			int m = min(v, rv);
-        			l += 2 * (2 * m);
-        			freqMap[s] -= m;
-        			freqMap[r] -= m;
+    string bestHand(vector<int>& ranks, vector<char>& suits) {
+		bool allSameSuits = true;
+		char suit = suits[0];
+		for(int i = 1; i < 5; i++) {
+			if(suits[i] != suit) allSameSuits = false;
+		}
+		if(allSameSuits) return "Flush";
 
-        		}
-        	}
-        }
-        for(auto fr : freqMap) {
-        	string s = fr.first;
-        	int v = fr.second;
-        	string r = s;
-        	reverse(r.begin(), r.end());
-        	if(s == r && v > 0) {
-        		l += 2;
-        		break;
-        	}
-        }
-        freqMap.clear();
-        return l;
+		vector<int> rankFreq(13, 0);
+		for(auto rank : ranks) {
+			rankFreq[rank - 1]++;
+		}
+		for(auto rank : rankFreq) {
+			if(rank >= 3) return "Three of a Kind";
+		}
+		for(auto rank : rankFreq) {
+			if(rank == 2) return "Pair";
+		}
+		return "High Card";
     }
 };
 
 void solve() {
 	// Main Code Goes Here !!
-	
-	int n; cin >> n;
-	vs words(n, " ");
-	for(int i = 0; i < n; i++) {
-		cin >> words[i];
-	}
+	const int n = 5;
+	vi ranks(n);
+	vc suits(n);
+	for(int i = 0; i < n; i++) cin >> ranks[i];
+	for(int i = 0; i < n; i++) cin >> suits[i];
+
 	Solution *soln = new Solution();
-	cout << soln->longestPalindrome(words);
+	cout << soln->bestHand(ranks, suits);
 
 	return;
 }
@@ -140,7 +118,7 @@ int32_t main() {
 	// cin >> testCases;
 	while(testCases--) solve();
 
-	cerr << "Run Time : " << ((double)(clock() - startTime) / CLOCKS_PER_SEC);
+	cerr << "\nRun Time : " << ((double)(clock() - startTime) / CLOCKS_PER_SEC);
 
 	return 0;
 }
