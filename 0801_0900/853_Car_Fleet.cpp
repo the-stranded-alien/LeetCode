@@ -66,14 +66,14 @@ public:
 	int carFleet(int target, vector<int>& position, vector<int>& speed) {
         set<pair<float, float> > ps;
         int n = position.size();
-        for(int i = 0; i < n; i++) ps.insert({-position[i], speed[i]});
+        for(int i = 0; i < n; ++i) ps.insert({-position[i], speed[i]});
 
         auto carItr = ps.begin();
     	float tr = -1;
     	int fleets = 0;
 
     	while(carItr != ps.end()) {
-    		float x = (target + carItr->first) * carItr->second;
+    		float x = (target + carItr->first) / carItr->second;
     		if(x > tr) fleets++, tr = x;
     		carItr++;
     	}

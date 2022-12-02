@@ -77,7 +77,7 @@ public:
 };
 
 void solve() {
-	// Main Code Goes Here !!
+	// Main Code Goes Here !!1
 	int n; cin >> n;
 	vvi costs(n, vector<int>(2, 0));
 	for(int i = 0; i < n; i++) cin >> costs[i][0] >> costs[i][1];

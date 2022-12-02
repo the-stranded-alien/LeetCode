@@ -69,9 +69,7 @@ public:
         int l = original.size();
         if(l != (m * n)) return {};
         vector<vector<int> > matrix(m, vector<int>(n, 0));
-        for(int i = 0; i < l; i++) {
-        	matrix[i / n][i % n] = original[i];
-        }
+        for(int i = 0; i < l; i++) matrix[i / n][i % n] = original[i];
         return matrix;
     }
 };
