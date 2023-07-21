@@ -31,11 +31,9 @@ public:
         	double taxRate = brackets[i][1];
         	int from = min(upper, income);
         	int toBeTaxed = from - prev;
-        	cout << toBeTaxed << endl;
         	if (toBeTaxed > 0) {
         		tax += (toBeTaxed * taxRate) / 100.0;
         	}
-
         	prev = upper;
         }
         return tax;
