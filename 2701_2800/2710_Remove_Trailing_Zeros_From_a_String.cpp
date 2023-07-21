@@ -8,9 +8,7 @@ public:
 	string removeTrailingZeros(string num) {
         int endIndex = num.length();
         while(endIndex) {
-        	if(num[endIndex - 1] != '0') {
-        		break;
-        	}
+        	if(num[endIndex - 1] != '0') break;
         	endIndex--;
         }
         return num.substr(0, endIndex);
