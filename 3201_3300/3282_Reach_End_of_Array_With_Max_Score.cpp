@@ -13,8 +13,7 @@ public:
     long long findMaximumScore(vector<int>& nums) {
         int sz = nums.size();
         long long score = 0;
-        if (sz == 0) return 0;
-        if (sz == 1) return nums[0];
+        if (sz == 1) return 0;
         int currIndex = 0;
         int nextIndex = 1;
         while(currIndex < sz && nextIndex < sz) {
